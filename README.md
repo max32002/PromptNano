@@ -24,6 +24,9 @@
 * **📘 內建詠唱秘籍**
   整合「提示詞教學」模組，包含逆向工程技巧、光影氛圍關鍵字與手繪風格指令，點擊關鍵字即可一鍵複製。
 
+* **🇹🇼 繁體中文友善**
+  新增的提示詞都會先轉換為繁體中文再存入Google Sheet資料庫。
+
 * **☁️ Google Drive 整合**
   基於 Google Apps Script (GAS) 開發，圖片與資料直接儲存在你的 Google Drive 與 Sheets，無需架設伺服器。
 
@@ -70,6 +73,58 @@
 點下某一個縮圖後,彈出實際完整圖片, 並顯示標題與說明欄位, 有要一個"複製" 的按鈕, 把說明欄位內容複製到剪貼簿.
 ```
 如果你有VPS 或 GCP / AWS 的話, 修改掉提示詞裡的 Google GAS, 就可以取得你需要的程式碼了. 
+
+有了相簿管理程式之後，我後續的提示詞有：
+```text
+修改溫暖相簿為"AI靈感資料庫", 圖片的說明欄位, 修改為"提示詞", 讓我們透過「圖片」直覺尋找提示詞， 結合強大的「逆向工程」分析，一鍵提煉雲標籤，讓創意隨取隨用。
+```
+提示詞用於修改網站名稱與相關按鈕上的名稱。
+
+以下增加刪除功能：
+```text
+在圖片清單的頁面, 增加刪除照片的功能, 刪除前要讓使用者做確認後才實際從 google drive 與 sheet 中刪除資料.
+```
+
+以下增加微調元件位置，與增加提示與確認不使用瀏覽器內建指令：
+```text
+* <button> tag 比照 hash tag 的 span 在 hover 時變換顏色.
+* #uploadOverlay的  modal 彈出後, <input type="text" name="title"> auto focus()
+* 移動 <button> 📋 複製提示詞 到 <div class="prompt-label">提示詞 (Prompt)</div> 右側, 讓使用者不用 scroll down.
+* #detailModal 裡的 #modalTags 比照瀏覽清單的 hash tag 顯示方式與規則.
+* #detailModal 裡的提供刪除該組照片的功能.
+* 整個網站, 要支援深色主題/淺色主題的切換功能.
+* 修改 confirm() 為使用 modal, 因為 confirm() 畫面太醜.
+* 修改 alert(), 以 Modal 取代.
+```
+
+用來切換整個網站風格：
+```text
+重新改寫這個整個網站的 css, 風格是可愛溫暖, 要支援深色/淺色主題的切換, 所有的彈出式 modal 都要套用到深色/淺色的主題.
+```
+
+增加"清除過濾"功能：
+```text
+增加"清除過濾" button 在 search box 右側, 點下後清除 search 關鍵字, 並重新取得無關鍵字的 list.
+```
+
+調整右側的按鈕：
+```text
+調整 .header-top 下, 右側3個 button 在視窗width 較小之下, 要置右.
+```
+這句比較神奇，AI 反而給出更具建設性的解法，是要把右側的按鈕變成群組，並集體置右。
+
+修改 hash tag 沒有正確被分隔開：
+```text
+修改 <span class="tag" onclick="filterByTag('#opennana #nano', event)">##opennana #nano</span> 的顯示方式為:
+tag 的內容, 以 "#" 進行 split, 前端顯示為多個 span tag.
+span tag 的 text 不要顯示 # 符號, 
+```
+
+如果你是簡體中的使用者，請註解掉文字轉換的指定，因為提示詞都會先轉換為繁體中文再存入Google Sheet資料庫，看不懂程式，可以服用下列提示詞:
+```text
+移除程式中關於提示詞語言轉換繁體中文的程式碼，並確保上傳的資料內容維持正確。
+```
+
 
 ## 🎨 更換主題 (Theme)
 
