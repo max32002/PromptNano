@@ -60,7 +60,7 @@
    取得生成的 Web App URL，即可開始管理你的靈感庫。
 
 
-## ⚙️ 初始版本 (Initial prompt)
+## ⚙️ 如何詠唱出你自己的版本 (Build app prompt)
 
 生成 Google Apps script + html 網頁的 AI提示詞:
 ```text
