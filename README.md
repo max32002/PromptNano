@@ -6,7 +6,7 @@
 
 ## 📖 專案簡介
 
-**PromptNano** 是一個輕量級、視覺化的 AI 提示詞（Prompt）管理工具。專為 Midjourney、Stable Diffusion 等 AI 創作者設計。
+**PromptNano** 是一個輕量級、視覺化的 AI 提示詞（Prompt）管理工具。專為 Nano banana, chatGPT, Midjourney、Stable Diffusion 等 AI 創作者設計。
 
 不同於冷冰冰的文字表格，PromptNano 讓你透過「看圖」的方式直覺管理靈感。搭配溫暖可愛的 UI 設計，支援深色/淺色主題切換，讓整理提示詞變成一件療癒的事。
 
@@ -38,7 +38,8 @@
 本專案適合部署於 Google Apps Script 環境。
 
 1. **建立 Google Sheet**
-   在 Google Drive 建立一個新的試算表，記下 `Spreadsheet ID`。
+   在 Google Drive 建立一個新的試算表，記下網址的 `Spreadsheet ID`。
+   在 Google Drive 建立一個用於上傳的資料夾，記下網址的 `Folder ID`。
 
 2. **建立 Apps Script**
    在試算表中點擊 `擴充功能` > `Apps Script`。
@@ -55,7 +56,21 @@
 5. **開始使用**
    取得生成的 Web App URL，即可開始管理你的靈感庫。
 
-## 🎨 更換主題 (Installation)
+
+## ⚙️ 初始版本 (Initial prompt)
+
+生成 Google Apps script + html 網頁的 AI提示詞:
+```text
+使用 google GAS, 寫一個相簿管理的網站, 網頁顯示風格為溫暖可愛, 上傳的圖片要在放 google driver 指定的上傳路徑, 上傳後自動產生縮圖, 圖片的屬性有:標題,說明欄位,tag,圖片實際google driver 存放路徑.
+
+前端相簿網頁, 可以輸入關鍵字進行圖片的說明欄位過濾查詢,
+
+前端相簿網頁在顯示上傳的照片時, 以縮圖的方式顯示, 並將圖片的 hash tag 欄位以 # 號進行分隔顯示, 點下某一個 tag, 以 tag 名稱過關鍵字, 對 tag 欄位進行 "#" + tag 名稱的過濾查詢,
+
+點下某一個縮圖後,彈出實際完整圖片, 並顯示標題與說明欄位, 有要一個"複製" 的按鈕, 把說明欄位內容複製到剪貼簿.
+```
+
+## 🎨 更換主題 (Theme)
 
 複製 index.html 內容貼到 AI, 提示詞:
 ```text
