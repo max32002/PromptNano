@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="referrer" content="no-referrer">
+<style>
+  :root {
+    /* 淺色主題 (草莓牛奶風) */
+    --bg-color: #FFF8F0;         /* 溫暖米白背景 */
+    --card-bg: #FFFFFF;          /* 純白卡片 */
+    --primary: #FF9EAA;          /* 柔和粉紅主色 */
+    --primary-hover: #FF7B8E;    /* 深一點的粉紅 */
+    --text-main: #5D4037;        /* 暖咖啡色文字，不使用純黑 */
+    --text-light: #8D6E63;       /* 淺咖啡色副標 */
+    --modal-bg: #FFFFFF;         /* Modal 背景 */
+    --input-bg: #FFF0F5;         /* 輸入框淺粉背景 */
+    --input-border: #FFD1DC;     /* 輸入框邊框 */
+    --shadow: 0 8px 20px rgba(255, 158, 170, 0.25); /* 柔和粉色陰影 */
+    --danger: #FF8A80;           /* 警告色 */
+    --tag-bg: #FFF0F5;           /* 標籤背景 */
+    --tag-text: #FF9EAA;         /* 標籤文字 */
+  }
+
+  /* 深色主題 (黑巧克力風) */
+  [data-theme="dark"] {
+    --bg-color: #2C2420;         /* 深咖啡背景 */
+    --card-bg: #3E322C;          /* 牛奶巧克力卡片 */
+    --primary: #FFB7B2;          /* 亮一點的粉色，在深色上清楚 */
+    --primary-hover: #FFCDD2;
+    --text-main: #EFEBE9;        /* 米色文字 */
+    --text-light: #BCAAA4;       /* 淺灰咖副標 */
+    --modal-bg: #3E322C;
+    --input-bg: #4E4038;         /* 深色輸入框 */
+    --input-border: #5D4037;
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    --tag-bg: #4E4038;
+    --tag-text: #FFB7B2;
+  }
+
+  body {
+    font-family: 'Nunito', 'Microsoft JhengHei', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 20px;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    line-height: 1.6;
+  }
+
+  /* 按鈕設定：圓潤可愛 */
+  button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Q彈效果 */
+    outline: none;
+  }
+
+  button:active {
+    transform: scale(0.95);
+  }
+
+  /* 通用輸入框 */
+  input[type="text"], 
+  input[type="file"], 
+  textarea {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: var(--input-bg);
+    border: 2px solid var(--input-border);
+    color: var(--text-main);
+    border-radius: 20px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+  }
+
+  input[type="text"]:focus, 
+  textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 158, 170, 0.2);
+  }
+
+  /* Header 區域 */
+  .header {
+    max-width: 1200px;
+    margin: 0 auto 40px auto;
+    text-align: center;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    background: var(--card-bg);
+    padding: 15px 25px;
+    border-radius: 25px;
+    box-shadow: var(--shadow);
+  }
+
+  h1 {
+    color: var(--primary);
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--text-light);
+    display: inline-block;
+    padding: 8px 25px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    border: 1px dashed var(--text-light);
+  }
+
+/* 確保搜尋列是橫向排列 */
+.search-bar {
+  display: flex;
+  align-items: center; /* 垂直置中 */
+  gap: 10px;           /* 輸入框跟按鈕的距離 */
+  width: 100%;
+  max-width: 500px;    /* 限制最大寬度 */
+}
+
+/* 關鍵修正：針對搜尋框裡的 input */
+.search-bar input {
+  width: auto;         /* 覆蓋原本的 100% 設定 */
+  flex: 1;             /* 讓它自動伸展填滿剩餘空間 */
+  margin: 0;
+}
+
+  /* 主要按鈕樣式 */
+  .btn-upload, .btn-copy, #sysBtnOk {
+    background: var(--primary);
+    color: #fff; /* 按鈕文字維持白色 */
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .btn-upload:hover, .btn-copy:hover, #sysBtnOk:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  /* 主題切換按鈕 */
+  .theme-toggle {
+    background: var(--input-bg);
+    color: var(--text-main);
+    border: 2px solid var(--input-border);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+  }
+
+  /* 卡片網格 */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* 單張卡片 */
+  .card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 1px solid var(--input-border);
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background-color: var(--input-bg);
+  }
+
+  .card-body {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--text-main);
+  }
+
+  /* 標籤 Tag */
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    color: var(--tag-text);
+    background: var(--tag-bg);
+    padding: 4px 12px;
+    border-radius: 15px;
+    transition: 0.2s;
+  }
+
+  .tag:hover {
+    background: var(--primary);
+    color: white;
+  }
+
+  /* 卡片上的刪除按鈕 */
+  .btn-delete {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--danger);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 5;
+  }
+
+  .card:hover .btn-delete {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  /* 深色模式下刪除鈕的背景微調 */
+  [data-theme="dark"] .btn-delete {
+      background: rgba(62, 50, 44, 0.9);
+  }
+
+  .btn-delete:hover {
+    background: var(--danger) !important;
+    color: white;
+  }
+
+  /* ----- Modal 通用設定 (包含詳情、上傳、系統提示) ----- */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Modal 內容區塊 */
+  .modal-content {
+    background: var(--modal-bg); /* 跟隨主題 */
+    color: var(--text-main);     /* 跟隨主題 */
+    width: 90%;
+    max-width: 850px;
+    max-height: 85vh;
+    border-radius: 25px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--input-border);
+  }
+
+  /* 詳情頁左右佈局 */
+  .modal-left {
+    flex: 1.2;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .modal-left img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .modal-right {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    position: relative;
+    background: var(--modal-bg);
+  }
+
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text-light);
+    line-height: 1;
+    z-index: 10;
+  }
+  .close:hover { color: var(--primary); }
+
+  h2, h3 { color: var(--text-main); }
+
+  .prompt-label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-top: 25px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .modal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  /* Modal 裡的灰色區塊 (提示詞顯示區) */
+  .modal-desc-box {
+    background: var(--input-bg);
+    padding: 15px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    border: 1px solid var(--input-border);
+    color: var(--text-main);
+    font-family: monospace;
+    white-space: pre-wrap;
+  }
+
+  /* Modal 裡的刪除鈕 */
+  .btn-modal-delete {
+    background: transparent;
+    color: var(--danger);
+    border: 2px solid var(--danger);
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: 15px;
+    margin-right: 20px;
+    font-weight: bold;
+  }
+  .btn-modal-delete:hover {
+    background: var(--danger);
+    color: white;
+  }
+
+  /* ----- 上傳與系統提示框特別樣式 ----- */
+  #uploadSection, #systemModal .modal-content {
+    background: var(--modal-bg);
+    color: var(--text-main);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: var(--shadow);
+  }
+
+  /* 針對上傳表單的定位 */
+  #uploadSection {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1001;
+    border: 1px solid var(--input-border);
+  }
+  
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+      display: block; 
+      margin-bottom: 8px; 
+      font-weight: bold; 
+      color: var(--text-main);
+  }
+
+  /* 系統提示框取消按鈕 */
+  .btn-cancel {
+    background: var(--input-bg);
+    color: var(--text-main);
+    border: 1px solid var(--input-border);
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+  }
+  .btn-cancel:hover {
+    background: var(--input-border);
+  }
+
+  /* 載入中遮罩 */
+  .loader {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    backdrop-filter: blur(5px);
+  }
+
+  /* RWD 手機版調整 */
+  @media (max-width: 768px) {
+    .modal-content { flex-direction: column; overflow-y: scroll; height: auto;}
+    .modal-left { height: 250px; flex: none; width: 100%; background: #000; }
+    .modal-right { padding: 20px; }
+    .header-top { flex-direction: column; align-items: stretch; padding: 20px;}
+    .search-bar { max-width: 100%; }
+    .btn-delete { opacity: 1; background: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    h1 { font-size: 1.4rem; }
+  }
+
+/* 清除按鈕專用樣式 */
+.btn-clear {
+  background: var(--card-bg);
+  color: var(--text-light);
+  border: 2px solid var(--input-border);
+  border-radius: 50%; /* 圓圓的比較可愛 */
+  width: 48px;        /* 配合輸入框的高度 */
+  height: 48px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;     /* 防止視窗變窄時按鈕被壓扁 */
+  margin-left: 5px;   /* 跟輸入框有點距離 */
+}
+
+.btn-clear:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--input-bg);
+  transform: rotate(90deg); /* 增加一點互動趣味 */
+}
+
+/* ----- 提示詞教學專用樣式 ----- */
+  details {
+    margin-bottom: 15px;
+    border: 1px solid var(--input-border);
+    border-radius: 15px;
+    background: var(--card-bg);
+    overflow: hidden;
+    transition: 0.3s;
+  }
+
+  details[open] {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-color: var(--primary);
+  }
+
+  summary {
+    padding: 15px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text-main);
+    background: var(--bg-color); /* 標題底色稍微不同 */
+    list-style: none; /* 隱藏預設箭頭 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+  }
+
+  /* 自製可愛箭頭 */
+  summary::after {
+    content: '▼';
+    color: var(--primary);
+    transition: 0.2s;
+    font-size: 0.8rem;
+  }
+
+  details[open] summary::after {
+    transform: rotate(180deg);
+  }
+
+  .details-content {
+    padding: 20px;
+    line-height: 1.8;
+    color: var(--text-main);
+    border-top: 1px solid var(--input-border);
+  }
+
+  .details-content h4 {
+    margin-top: 15px;
+    margin-bottom: 8px;
+    color: var(--primary);
+    border-left: 4px solid var(--primary);
+    padding-left: 10px;
+  }
+
+  /* 關鍵字按鈕樣式 */
+  .kw {
+    display: inline-block;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-main);
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin: 3px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    cursor: copy; /* 滑鼠游標變成複製 */
+    transition: 0.2s;
+  }
+
+  .kw:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.05);
+  }
+  
+  .keyword-group { margin-bottom: 10px; }
+  .label { font-weight:bold; color:var(--text-light); }
+  .tip { font-size: 0.85rem; color: var(--text-light); font-style: italic; margin-top: 10px;}
+
+/* 頁尾版本號樣式 */
+.footer {
+  text-align: center;
+  margin-top: 50px;       /* 與上方內容隔開 */
+  margin-bottom: 20px;    /* 與視窗底部留點空隙 */
+  padding-top: 20px;
+  border-top: 1px dashed var(--input-border); /* 加一條淡淡的虛線分隔 */
+  color: var(--text-light); /* 使用淺色文字 */
+  font-size: 0.8rem;      /* 字體縮小 */
+  opacity: 0.7;           /* 讓它更不顯眼一點 */
+  display: flex;
+  justify-content: center;
+  gap: 15px;              /* 版本號跟版權宣告的距離 */
+}
+
+/* 讓版本號滑鼠移過去時稍微明顯一點，增加互動感 */
+.version-tag:hover {
+  opacity: 1;
+  color: var(--primary);
+  cursor: help;
+}
+</style></head>
+<body>
+
+  <div class="header">
+
+<div class="header-top">
+  <h1>✨ AI 提示詞圖庫</h1>
+  
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="搜尋提示詞(Prompt) 或 #Tag...">
+    <button class="btn-clear" onclick="clearFilter()" title="清除搜尋">✕</button>
+  </div>
+
+  <div class="header-buttons">
+    <button class="theme-toggle" onclick="toggleTheme()">🌓 切換模式</button>
+    <button class="btn-upload" onclick="openTutorial()" style="background:var(--text-light);">📘 秘籍</button>
+    <button class="btn-upload" onclick="toggleUpload()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383"/>
+  <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708z"/>
+</svg> 新增靈感</button>
+  </div>
+</div>    
+
+    <div class="subtitle">
+      透過看圖找靈感。自訂的分類檢索。AI 創意提示詞庫隨取隨用。
+    </div>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <p style="text-align:center; width:100%; color:#888;">正在載入靈感庫...</p>
+  </div>
+
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-left">
+        <img id="modalImg" src="">
+      </div>
+      <div class="modal-right">
+        <span class="close" onclick="closeModal()">&times;</span>
+
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <h2 id="modalTitle" style="margin:0; flex-grow:1;">標題</h2>
+           <button class="btn-modal-delete" id="modalDeleteBtn" onclick=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+</svg></button>
+        </div>
+
+        <div class="prompt-label">AI 雲標籤 (Cloud Tags)</div>
+        <div class="card-tags" id="modalTags" style="margin-bottom: 15px;"></div>
+
+        <div class="modal-header-row">
+           <div class="prompt-label">提示詞 (Prompt)</div>
+           <button class="btn-copy" onclick="copyDesc()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0  00-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
+</svg></button>
+        </div>
+
+        <div class="modal-desc-box">
+          <div id="modalDesc"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="uploadOverlay" class="modal" style="z-index: 999;" onclick="if(event.target==this) toggleUpload()">
+    <form id="uploadForm" onsubmit="handleUpload(event)">
+      <div id="uploadSection" style="display:block;">
+        <h3 style="text-align:center; color:var(--primary);">新增 AI 靈感</h3>
+        <div class="form-group">
+          <label>參考圖片</label>
+          <input type="file" name="imageFile" accept="image/*" required>
+        </div>
+        <div class="form-group">
+          <label>標題</label>
+          <input type="text" name="title" required placeholder="例如: 賽博龐克少女">
+        </div>
+        <div class="form-group">
+          <label>雲標籤 (Tag)</label>
+          <input type="text" name="tags" placeholder="例如: 8k, masterpiece, light effect">
+        </div>
+        <div class="form-group">
+          <label>完整提示詞 (Prompt)</label>
+          <textarea name="desc" rows="5" placeholder="輸入完整的 AI 生成指令..."></textarea>
+        </div>
+        <button type="submit" class="btn-upload" style="width:100%">確認建檔</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="loader" id="loader">處理中...</div>
+
+<div id="systemModal" class="modal" style="z-index: 2000;">
+    <div class="modal-content" style="max-width: 350px; flex-direction: column; height: auto; padding: 25px;">
+      <h3 id="sysTitle" style="text-align:center; margin-bottom:15px; color:var(--primary);">提示</h3>
+      <p id="sysMsg" style="text-align:center; margin-bottom:25px; line-height:1.6; color:var(--text-main);"></p>
+
+      <div style="display: flex; gap: 15px; justify-content: center;">
+        <button id="sysBtnCancel" class="btn-cancel" onclick="closeSystemModal()">取消</button>
+        <button id="sysBtnOk" class="btn-upload" style="min-width: 80px;">確定</button>
+      </div>
+    </div>
+  </div>
+
+<div id="tutorialModal" class="modal">
+  <div class="modal-content" style="max-width: 800px; flex-direction: column; max-height: 85vh;">
+    
+    <div style="padding: 20px 30px; border-bottom: 1px solid var(--input-border); display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="margin:0; font-size:1.5rem; color:var(--primary);">📘 詠唱魔法秘籍</h2>
+      <span class="close" onclick="closeTutorial()" style="position:static;">&times;</span>
+    </div>
+
+    <div class="modal-body" style="padding: 30px; overflow-y: auto;">
+      
+      <details open>
+        <summary>🤖 懶人法：逆向工程</summary>
+        <div class="details-content">
+          <p>不知道怎麼下高品質的提示詞？</p>
+          <ol>
+            <li>先去收集別人的作品。</li>
+            <li>上傳給 AI 後，請 AI 分析並生成提示詞。</li>
+            <li>有了基礎再進行調整，效率更加倍！</li>
+          </ol>
+        </div>
+      </details>
+
+      <details>
+        <summary>✏️ 風格與手繪質感</summary>
+        <div class="details-content">
+          <p>讓畫面更有溫度的關鍵字：</p>
+          <div class="keyword-group">
+            <span class="label">風格：</span>
+            <span class="kw" onclick="copyKw(this)">Minimalist</span>
+            <span class="kw" onclick="copyKw(this)">Hand-drawn</span>
+            <span class="kw" onclick="copyKw(this)">Rough sketch</span>
+          </div>
+          <div class="keyword-group">
+            <span class="label">筆觸：</span>
+            <span class="kw" onclick="copyKw(this)">Ink texture</span>
+            <span class="kw" onclick="copyKw(this)">Shaky lines</span>
+            <span class="kw" onclick="copyKw(this)">Felt tip pen</span>
+          </div>
+          <div class="keyword-group">
+            <span class="label">構圖：</span>
+            <span class="kw" onclick="copyKw(this)">White background</span>
+            <span class="kw" onclick="copyKw(this)">No 3D render</span>
+          </div>
+          <p class="tip">💡 點擊關鍵字可直接複製！</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>🚫 拒絕塑膠味 (去除 AI 感)</summary>
+        <div class="details-content">
+          <p>太完美的線條反而假，試試看加入這些「瑕疵」：</p>
+          <ul style="list-style: none; padding:0;">
+            <li><span class="kw" onclick="copyKw(this)">Shaky hand-drawn lines</span> : 避免太完美的幾何線條。</li>
+            <li><span class="kw" onclick="copyKw(this)">Charcoal sketch effect</span> : 增加碳筆或摩擦感。</li>
+            <li><span class="kw" onclick="copyKw(this)">Primitive drawing style</span> : 像隨手畫在筆記本上的感覺。</li>
+            <li><span class="kw" onclick="copyKw(this)">White paper texture</span> : 增加背景真實紙張紋理。</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>✨ 氛圍大補帖 (Atmosphere)</summary>
+        <div class="details-content">
+          <p>氛圍是決定圖片質感的靈魂！</p>
+          
+          <h4>1. 光影 (Lighting)</h4>
+          <div class="keyword-cloud">
+            <span class="kw" onclick="copyKw(this)">Golden Hour</span>
+            <span class="kw" onclick="copyKw(this)">Cinematic Lighting</span>
+            <span class="kw" onclick="copyKw(this)">Volumetric Lighting</span>
+            <span class="kw" onclick="copyKw(this)">Soft Lighting</span>
+            <span class="kw" onclick="copyKw(this)">Bioluminescent</span>
+            <span class="kw" onclick="copyKw(this)">Neon Glow</span>
+          </div>
+
+          <h4>2. 情緒 (Mood)</h4>
+          <div class="keyword-cloud">
+            <span class="kw" onclick="copyKw(this)">Moody</span>
+            <span class="kw" onclick="copyKw(this)">Ethereal</span>
+            <span class="kw" onclick="copyKw(this)">Vintage</span>
+            <span class="kw" onclick="copyKw(this)">Melancholy</span>
+            <span class="kw" onclick="copyKw(this)">Muted Colors</span>
+          </div>
+
+          <h4>3. 環境 (Environment)</h4>
+          <div class="keyword-cloud">
+            <span class="kw" onclick="copyKw(this)">Foggy</span>
+            <span class="kw" onclick="copyKw(this)">Dust Motes</span>
+            <span class="kw" onclick="copyKw(this)">Rain-soaked</span>
+            <span class="kw" onclick="copyKw(this)">Cyberpunk Aesthetic</span>
+            <span class="kw" onclick="copyKw(this)">Studio Ghibli style</span>
+          </div>
+
+          <h4>4. 電影感 (Cinematic)</h4>
+          <div class="keyword-cloud">
+             <span class="kw" onclick="copyKw(this)">Film Grain</span>
+             <span class="kw" onclick="copyKw(this)">Depth of Field</span>
+             <span class="kw" onclick="copyKw(this)">Wide Shot</span>
+             <span class="kw" onclick="copyKw(this)">Close-up</span>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>🥊 實戰範例：圖書館女孩</summary>
+        <div class="details-content">
+          <div style="background:var(--bg-color); padding:15px; border-radius:10px; margin-bottom:10px;">
+            <strong>😐 普通描述：</strong><br>
+            A girl in a library
+          </div>
+          <div style="background:var(--input-bg); padding:15px; border-radius:10px; border:1px solid var(--primary);">
+            <strong>😍 加入氛圍後：</strong><br>
+            A girl in a library, <span class="kw" onclick="copyKw(this)">Golden Hour</span>, <span class="kw" onclick="copyKw(this)">Volumetric lighting</span>, <span class="kw" onclick="copyKw(this)">Dust motes</span>, <span class="kw" onclick="copyKw(this)">Cinematic</span>, <span class="kw" onclick="copyKw(this)">Muted colors</span>
+          </div>
+          <p style="font-size:0.9rem; color:var(--text-light); margin-top:10px;">這會讓原本普通的人像，變成一張充滿午後陽光、塵埃飛舞、色調高級的電影海報。</p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span class="version-tag">System Ver 1.0.0</span>
+  <span class="copyright">PromptNano AI 提示詞圖庫</span>
+</div>
+
+  <script>
+    let allPhotos = [];
+
+    window.onload = function() {
+      loadData();
+      document.getElementById('uploadOverlay').style.display = 'none';
+    };
+
+    function loadData() {
+       google.script.run.withSuccessHandler(renderGallery).getPhotoData();
+    }
+
+function renderGallery(data) {
+      console.log('📦 前端收到資料:', data); // 打開 F12 Console 看這裡
+
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = ''; // 清空畫面
+
+      // 1. 檢查資料是否為空
+      if (!data || data.length === 0) {
+        console.log('⚠️ 資料為空或是長度為 0');
+        gallery.innerHTML = '<p style="text-align:center; width:100%;">目前沒有靈感資料，請上傳。</p>';
+        return;
+      }
+
+      allPhotos = data;
+
+      // 2. 開始逐筆渲染
+      data.forEach((photo, index) => {
+        try {
+          console.log(`正在渲染第 ${index + 1} 筆資料:`, photo.title);
+
+          let tagsHtml = '';
+          // 【防呆重點】: 強制把 tags 轉成字串再處理，避免如果是數字或 undefined 導致 split 報錯
+          if (photo.tags) {
+            const tagString = String(photo.tags);
+
+            // 修改重點 1：改用 '#' 來切割字串
+            const tagList = tagString.split('#')
+              .map(t => t.trim()) // 去除前後空白
+              .filter(t => t);    // 濾掉空字串 (例如開頭的空字串)
+
+            // 修改重點 2：顯示時直接放 t (不加 #)，點擊事件傳送的參數也不用動
+            tagsHtml = tagList.slice(0, 3).map(t =>
+              `<span class="tag" onclick="filterByTag('${t}', event)">${t}</span>`
+            ).join('');
+
+            if(tagList.length > 3) tagsHtml += `<span class="tag" style="background:none;">...</span>`;
+          }
+
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.onclick = () => openModal(photo);
+
+          // 建構 HTML
+          card.innerHTML = `
+            <button class="btn-delete" onclick="deleteItem('${photo.id}', event)" title="刪除此靈感"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+</svg></button>
+            <img class="card-img" src="${photo.url}" loading="lazy" onerror="this.src='https://placehold.co/400?text=Image+Error'">
+            <div class="card-body">
+              <div class="card-title">${photo.title || '無標題'}</div>
+              <div class="card-tags">${tagsHtml}</div>
+            </div>
+          `;
+
+          gallery.appendChild(card);
+          console.log(`✅ 第 ${index + 1} 筆渲染成功`);
+
+        } catch (err) {
+          console.error(`❌ 第 ${index + 1} 筆渲染失敗!`, err);
+          console.error('出錯的資料:', photo);
+          // 為了讓你看見錯誤，我們直接把錯誤顯示在畫面上
+          const errorCard = document.createElement('div');
+          errorCard.style.padding = "20px";
+          errorCard.style.color = "red";
+          errorCard.innerText = `此卡片顯示錯誤: ${err.message}`;
+          gallery.appendChild(errorCard);
+        }
+      });
+    }
+
+    // 刪除項目功能
+    function deleteItem(id, event, isFromModal = false) {
+      if(event) event.stopPropagation();
+
+      // 改用自製 Modal，把刪除邏輯包在 function 裡傳進去
+      showConfirm("⚠️ 確定要刪除這個靈感嗎？\n資料與圖片將無法復原。", function() {
+
+        if(isFromModal) closeModal(); // 關閉詳情頁
+
+        document.getElementById('loader').innerText = "正在刪除資料與圖片...";
+        document.getElementById('loader').style.display = 'flex';
+
+        google.script.run
+          .withSuccessHandler(function(res) {
+            document.getElementById('loader').style.display = 'none';
+            if (res.success) {
+              showAlert("已成功刪除！"); // 改用 showAlert
+              loadData();
+            } else {
+              showAlert("刪除失敗：" + res.error); // 改用 showAlert
+            }
+          })
+          .deletePhoto(id);
+      });
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function(e) {
+      const keyword = e.target.value.toLowerCase();
+      const filtered = allPhotos.filter(photo => {
+        if (keyword.startsWith('#')) {
+          const tagSearch = keyword.substring(1);
+          return photo.tags && photo.tags.toLowerCase().includes(tagSearch);
+        }
+        return (photo.desc && photo.desc.toLowerCase().includes(keyword)) ||
+               (photo.title && photo.title.toLowerCase().includes(keyword));
+      });
+      renderGallery(filtered);
+    });
+
+    function filterByTag(tagName, event) {
+      event.stopPropagation();
+      searchInput.value = '#' + tagName;
+      searchInput.dispatchEvent(new Event('input'));
+    }
+
+    const modal = document.getElementById('detailModal');
+    function openModal(photo) {
+      document.getElementById('modalImg').src = photo.url;
+      document.getElementById('modalTitle').innerText = photo.title;
+      document.getElementById('modalDesc').innerText = photo.desc || '無提示詞';
+
+      // 設定刪除按鈕的 onclick 事件，讓它呼叫 deleteItem 並關閉 modal
+      // 注意：這裡傳入 true 代表是從 Modal 觸發的，刪除後要關閉 Modal
+      document.getElementById('modalDeleteBtn').onclick = (e) => deleteItem(photo.id, e, true);
+
+      // --- Tag 處理 (比照 Gallery 的 # split 邏輯) ---
+      let tagsHtml = '';
+      if (photo.tags) {
+        const tagString = String(photo.tags);
+        // 使用 # 切割，並過濾空白
+        const tagList = tagString.split('#').map(t => t.trim()).filter(t => t);
+
+        tagsHtml = tagList.map(t =>
+           `<span class="tag" onclick="filterByTag('${t}', event); closeModal();">${t}</span>`
+        ).join('');
+      }
+      document.getElementById('modalTags').innerHTML = tagsHtml;
+
+      modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) closeModal();
+    }
+
+function copyDesc() {
+  const text = document.getElementById('modalDesc').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '✅ 提示詞已複製';
+    setTimeout(() => {
+      btn.innerHTML = originalContent;
+    }, 3000);
+  });
+}
+
+    function toggleUpload() {
+      const el = document.getElementById('uploadOverlay');
+      el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function handleUpload(e) {
+      e.preventDefault();
+      document.getElementById('loader').innerText = "正在進行逆向工程建檔中...";
+      document.getElementById('loader').style.display = 'flex';
+
+      const form = document.getElementById('uploadForm');
+      google.script.run
+        .withSuccessHandler(function(res) {
+           document.getElementById('loader').style.display = 'none';
+           if(res.success) {
+             toggleUpload();
+             form.reset();
+             showAlert('資料建檔成功！'); // 改用 showAlert
+             loadData();
+           } else {
+             showAlert('失敗: ' + res.error, "錯誤"); // 改用 showAlert
+           }
+        })
+        .uploadPhoto(form);
+    }
+
+    // 頁面載入時讀取設定
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const target = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', target);
+      localStorage.setItem('theme', target);
+    }
+
+    function toggleUpload() {
+      const el = document.getElementById('uploadOverlay');
+      const isHidden = (el.style.display === 'none' || el.style.display === '');
+      el.style.display = isHidden ? 'flex' : 'none';
+
+      // 如果是開啟視窗，自動聚焦在標題欄位
+      if (isHidden) {
+        setTimeout(() => {
+           document.querySelector('input[name="title"]').focus();
+        }, 100);
+      }
+    }
+
+
+const sysModal = document.getElementById('systemModal');
+    const sysTitle = document.getElementById('sysTitle');
+    const sysMsg = document.getElementById('sysMsg');
+    const sysBtnOk = document.getElementById('sysBtnOk');
+    const sysBtnCancel = document.getElementById('sysBtnCancel');
+
+    function closeSystemModal() {
+      sysModal.style.display = 'none';
+    }
+
+    // 取代 alert()
+    function showAlert(msg, title = "提示") {
+      sysTitle.innerText = title;
+      sysMsg.innerText = msg;
+      sysBtnCancel.style.display = 'none'; // 隱藏取消鈕
+      sysBtnOk.onclick = closeSystemModal; // 按確定只關閉視窗
+      sysModal.style.display = 'flex';
+    }
+
+    // 取代 confirm() - 這裡最重要，接收一個 callback 函式
+    function showConfirm(msg, onConfirm) {
+      sysTitle.innerText = "確認操作";
+      sysMsg.innerText = msg;
+      sysBtnCancel.style.display = 'block'; // 顯示取消鈕
+
+      // 當按下確定時，執行傳進來的函式，然後關閉視窗
+      sysBtnOk.onclick = function() {
+        onConfirm();
+        closeSystemModal();
+      };
+
+      sysModal.style.display = 'flex';
+    }
+
+function clearFilter() {
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  // 模擬使用者輸入行為，觸發原本的篩選邏輯
+  input.dispatchEvent(new Event('input'));
+}
+
+// 開啟教學 Modal
+  function openTutorial() {
+    document.getElementById('tutorialModal').style.display = 'flex';
+  }
+
+  function closeTutorial() {
+    document.getElementById('tutorialModal').style.display = 'none';
+  }
+
+  // 點擊 Modal 外部關閉
+  window.addEventListener('click', function(e){
+    if(e.target == document.getElementById('tutorialModal')){
+      closeTutorial();
+    }
+  });
+
+  // 點擊關鍵字複製功能
+  function copyKw(el) {
+    const text = el.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      // 簡單的視覺回饋
+      const originalBg = el.style.background;
+      const originalText = el.innerText;
+      
+      el.innerText = '已複製!';
+      el.style.backgroundColor = 'var(--primary)';
+      el.style.color = '#fff';
+
+      setTimeout(() => {
+        el.innerText = text;
+        el.style.backgroundColor = '';
+        el.style.color = '';
+      }, 800);
+    });
+  }
+  </script>
+</body>
+</html>
