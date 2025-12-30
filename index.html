@@ -817,9 +817,15 @@
       document.getElementById('uploadOverlay').style.display = 'none';
     };
 
-    function loadData() {
-       google.script.run.withSuccessHandler(renderGallery).getPhotoData();
-    }
+function loadData() {
+  google.script.run.withSuccessHandler(function(data) {
+    // 1. 先把完整的資料存到全域變數備份
+    allPhotos = data; 
+    
+    // 2. 再把資料拿去畫圖
+    renderGallery(allPhotos); 
+  }).getPhotoData();
+}
 
 function renderGallery(data) {
       console.log('📦 前端收到資料:', data); // 打開 F12 Console 看這裡
@@ -833,8 +839,6 @@ function renderGallery(data) {
         gallery.innerHTML = '<p style="text-align:center; width:100%;">目前沒有靈感資料，請上傳。</p>';
         return;
       }
-
-      allPhotos = data;
 
       // 2. 開始逐筆渲染
       data.forEach((photo, index) => {
@@ -892,30 +896,47 @@ function renderGallery(data) {
     }
 
     // 刪除項目功能
-    function deleteItem(id, event, isFromModal = false) {
-      if(event) event.stopPropagation();
+function deleteItem(id, event, isFromModal = false) {
+  if (event) event.stopPropagation();
 
-      // 改用自製 Modal，把刪除邏輯包在 function 裡傳進去
-      showConfirm("⚠️ 確定要刪除這個靈感嗎？\n資料與圖片將無法復原。", function() {
+  showConfirm("⚠️ 確定要刪除這個靈感嗎？\n資料與圖片將無法復原。", function() {
 
-        if(isFromModal) closeModal(); // 關閉詳情頁
+    if (isFromModal) closeModal();
 
-        document.getElementById('loader').innerText = "正在刪除資料與圖片...";
-        document.getElementById('loader').style.display = 'flex';
+    const loader = document.getElementById('loader');
+    loader.innerText = "正在刪除資料與圖片...";
+    loader.style.display = 'flex';
 
-        google.script.run
-          .withSuccessHandler(function(res) {
-            document.getElementById('loader').style.display = 'none';
-            if (res.success) {
-              showAlert("已成功刪除！"); // 改用 showAlert
-              loadData();
-            } else {
-              showAlert("刪除失敗：" + res.error); // 改用 showAlert
-            }
-          })
-          .deletePhoto(id);
-      });
-    }
+    google.script.run
+      .withSuccessHandler(function(res) {
+        loader.style.display = 'none';
+        
+        if (res.success) {
+          showAlert("已成功刪除！");
+
+          // --- 修改重點開始 ---
+          // 1. 直接從本地變數 allPhotos 移除該筆資料 (不用呼叫 loadData)
+          allPhotos = allPhotos.filter(photo => photo.id !== id);
+
+          // 2. 檢查目前有沒有搜尋關鍵字
+          const searchInput = document.getElementById('searchInput');
+          if (searchInput.value.trim() !== '') {
+            // 如果有搜尋字，手動觸發 input 事件，讓它重新過濾
+            // 這樣使用者刪除後，還會留在原本的搜尋結果裡，體驗比較好
+            searchInput.dispatchEvent(new Event('input'));
+          } else {
+            // 如果沒搜尋，直接重畫更新後的 allPhotos
+            renderGallery(allPhotos);
+          }
+          // --- 修改重點結束 ---
+
+        } else {
+          showAlert("刪除失敗：" + res.error);
+        }
+      })
+      .deletePhoto(id);
+  });
+}
 
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', function(e) {
@@ -1071,8 +1092,7 @@ const sysModal = document.getElementById('systemModal');
 function clearFilter() {
   const input = document.getElementById('searchInput');
   input.value = '';
-  // 模擬使用者輸入行為，觸發原本的篩選邏輯
-  input.dispatchEvent(new Event('input'));
+  renderGallery(allPhotos); 
 }
 
 // 開啟教學 Modal
