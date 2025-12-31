@@ -19,7 +19,7 @@
     --shadow: 0 8px 20px rgba(255, 158, 170, 0.25); /* 柔和粉色陰影 */
     --danger: #FF8A80;           /* 警告色 */
     --tag-bg: #FFF0F5;           /* 標籤背景 */
-    --tag-text: #FF9EAA;         /* 標籤文字 */
+    --tag-text: #E07090;         /* 標籤文字 */
   }
 
   /* 深色主題 (黑巧克力風) */
@@ -137,9 +137,9 @@
   margin: 0;
 }
 
-  /* 主要按鈕樣式 */
-  .btn-upload, .btn-copy, #sysBtnOk {
-    background: var(--primary);
+  /* 主要按鈕樣式 (新增 .btn-download) */
+  .btn-upload, .btn-copy, .btn-download, #sysBtnOk {
+    background: var(--text-light);
     color: #fff; /* 按鈕文字維持白色 */
     padding: 10px 25px;
     border-radius: 25px;
@@ -147,7 +147,7 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
 
-  .btn-upload:hover, .btn-copy:hover, #sysBtnOk:hover {
+  .btn-upload:hover, .btn-copy:hover, .btn-download:hover, #sysBtnOk:hover {
     background: var(--primary-hover);
     transform: translateY(-2px);
   }
@@ -376,7 +376,7 @@
     cursor: pointer;
     font-size: 0.9rem;
     margin-left: 15px;
-    margin-right: 20px;
+    margin-right: 30px;
     font-weight: bold;
   }
   .btn-modal-delete:hover {
@@ -595,10 +595,7 @@
   <div class="header-buttons">
     <button class="theme-toggle" onclick="toggleTheme()">🌓 切換模式</button>
     <button class="btn-upload" onclick="openTutorial()" style="background:var(--text-light);">📘 秘籍</button>
-    <button class="btn-upload" onclick="toggleUpload()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383"/>
-  <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708z"/>
-</svg> 新增靈感</button>
+    <button class="btn-upload" onclick="toggleUpload()">＋ 新增靈感</button>
   </div>
 </div>    
 
@@ -631,9 +628,19 @@
 
         <div class="modal-header-row">
            <div class="prompt-label">提示詞 (Prompt)</div>
-           <button class="btn-copy" onclick="copyDesc()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0  00-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
-</svg></button>
+           
+           <div style="display:flex; gap: 10px;">
+             <button class="btn-download" onclick="downloadImage()" title="下載預覽圖">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                 <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+               </svg>
+             </button>
+             
+             <button class="btn-copy" onclick="copyDesc()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0  00-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
+  </svg></button>
+           </div>
         </div>
 
         <div class="modal-desc-box">
@@ -805,69 +812,62 @@
 </div>
 
 <div class="footer">
-  <span class="version-tag">System Ver 1.0.0</span>
+  <span class="version-tag">System Ver 1.1.0</span>
   <span class="copyright">PromptNano AI 提示詞圖庫</span>
 </div>
 
-  <script>
+<script>
     let allPhotos = [];
 
     window.onload = function() {
       loadData();
+      // 確保一開始是隱藏的
       document.getElementById('uploadOverlay').style.display = 'none';
     };
 
-function loadData() {
-  google.script.run.withSuccessHandler(function(data) {
-    // 1. 先把完整的資料存到全域變數備份
-    allPhotos = data; 
-    
-    // 2. 再把資料拿去畫圖
-    renderGallery(allPhotos); 
-  }).getPhotoData();
-}
+    function loadData() {
+      google.script.run.withSuccessHandler(function(data) {
+        allPhotos = data; 
+        renderGallery(allPhotos); 
+      }).getPhotoData();
+    }
 
-function renderGallery(data) {
-      console.log('📦 前端收到資料:', data); // 打開 F12 Console 看這裡
+    // 提取標籤的共用函式 (優化項目)
+    function parseTags(tagData) {
+      if (!tagData) return [];
+      return String(tagData)
+        .split('#')
+        .map(t => t.trim())
+        .filter(t => t);
+    }
+
+    function renderGallery(data) {
+      console.log('📦 前端收到資料:', data); 
 
       const gallery = document.getElementById('gallery');
-      gallery.innerHTML = ''; // 清空畫面
+      gallery.innerHTML = ''; 
 
-      // 1. 檢查資料是否為空
       if (!data || data.length === 0) {
-        console.log('⚠️ 資料為空或是長度為 0');
         gallery.innerHTML = '<p style="text-align:center; width:100%;">目前沒有靈感資料，請上傳。</p>';
         return;
       }
 
-      // 2. 開始逐筆渲染
       data.forEach((photo, index) => {
         try {
-          console.log(`正在渲染第 ${index + 1} 筆資料:`, photo.title);
-
           let tagsHtml = '';
-          // 【防呆重點】: 強制把 tags 轉成字串再處理，避免如果是數字或 undefined 導致 split 報錯
-          if (photo.tags) {
-            const tagString = String(photo.tags);
+          // 使用共用函式處理 Tags
+          const tagList = parseTags(photo.tags);
+          
+          tagsHtml = tagList.slice(0, 3).map(t =>
+            `<span class="tag" onclick="filterByTag('${t}', event)">${t}</span>`
+          ).join('');
 
-            // 修改重點 1：改用 '#' 來切割字串
-            const tagList = tagString.split('#')
-              .map(t => t.trim()) // 去除前後空白
-              .filter(t => t);    // 濾掉空字串 (例如開頭的空字串)
-
-            // 修改重點 2：顯示時直接放 t (不加 #)，點擊事件傳送的參數也不用動
-            tagsHtml = tagList.slice(0, 3).map(t =>
-              `<span class="tag" onclick="filterByTag('${t}', event)">${t}</span>`
-            ).join('');
-
-            if(tagList.length > 3) tagsHtml += `<span class="tag" style="background:none;">...</span>`;
-          }
+          if(tagList.length > 3) tagsHtml += `<span class="tag" style="background:none;">...</span>`;
 
           const card = document.createElement('div');
           card.className = 'card';
           card.onclick = () => openModal(photo);
 
-          // 建構 HTML
           card.innerHTML = `
             <button class="btn-delete" onclick="deleteItem('${photo.id}', event)" title="刪除此靈感"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
   <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
@@ -880,12 +880,8 @@ function renderGallery(data) {
           `;
 
           gallery.appendChild(card);
-          console.log(`✅ 第 ${index + 1} 筆渲染成功`);
-
         } catch (err) {
           console.error(`❌ 第 ${index + 1} 筆渲染失敗!`, err);
-          console.error('出錯的資料:', photo);
-          // 為了讓你看見錯誤，我們直接把錯誤顯示在畫面上
           const errorCard = document.createElement('div');
           errorCard.style.padding = "20px";
           errorCard.style.color = "red";
@@ -895,60 +891,58 @@ function renderGallery(data) {
       });
     }
 
-    // 刪除項目功能
-function deleteItem(id, event, isFromModal = false) {
-  if (event) event.stopPropagation();
+    function deleteItem(id, event, isFromModal = false) {
+      if (event) event.stopPropagation();
 
-  showConfirm("⚠️ 確定要刪除這個靈感嗎？\n資料與圖片將無法復原。", function() {
+      showConfirm("⚠️ 確定要刪除這個靈感嗎？\n資料與圖片將無法復原。", function() {
+        if (isFromModal) closeModal();
 
-    if (isFromModal) closeModal();
+        const loader = document.getElementById('loader');
+        loader.innerText = "正在刪除資料與圖片...";
+        loader.style.display = 'flex';
 
-    const loader = document.getElementById('loader');
-    loader.innerText = "正在刪除資料與圖片...";
-    loader.style.display = 'flex';
+        google.script.run
+          .withSuccessHandler(function(res) {
+            loader.style.display = 'none';
+            
+            if (res.success) {
+              showAlert("已成功刪除！");
+              
+              // 本地更新資料
+              allPhotos = allPhotos.filter(photo => photo.id !== id);
 
-    google.script.run
-      .withSuccessHandler(function(res) {
-        loader.style.display = 'none';
-        
-        if (res.success) {
-          showAlert("已成功刪除！");
-
-          // --- 修改重點開始 ---
-          // 1. 直接從本地變數 allPhotos 移除該筆資料 (不用呼叫 loadData)
-          allPhotos = allPhotos.filter(photo => photo.id !== id);
-
-          // 2. 檢查目前有沒有搜尋關鍵字
-          const searchInput = document.getElementById('searchInput');
-          if (searchInput.value.trim() !== '') {
-            // 如果有搜尋字，手動觸發 input 事件，讓它重新過濾
-            // 這樣使用者刪除後，還會留在原本的搜尋結果裡，體驗比較好
-            searchInput.dispatchEvent(new Event('input'));
-          } else {
-            // 如果沒搜尋，直接重畫更新後的 allPhotos
-            renderGallery(allPhotos);
-          }
-          // --- 修改重點結束 ---
-
-        } else {
-          showAlert("刪除失敗：" + res.error);
-        }
-      })
-      .deletePhoto(id);
-  });
-}
+              const searchInput = document.getElementById('searchInput');
+              if (searchInput.value.trim() !== '') {
+                searchInput.dispatchEvent(new Event('input'));
+              } else {
+                renderGallery(allPhotos);
+              }
+            } else {
+              showAlert("刪除失敗：" + res.error);
+            }
+          })
+          .deletePhoto(id);
+      });
+    }
 
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', function(e) {
       const keyword = e.target.value.toLowerCase();
+      
       const filtered = allPhotos.filter(photo => {
+        // Tag 搜尋模式
         if (keyword.startsWith('#')) {
           const tagSearch = keyword.substring(1);
-          return photo.tags && photo.tags.toLowerCase().includes(tagSearch);
+          return photo.tags && String(photo.tags).toLowerCase().includes(tagSearch);
         }
-        return (photo.desc && photo.desc.toLowerCase().includes(keyword)) ||
-               (photo.title && photo.title.toLowerCase().includes(keyword));
+        
+        // 一般搜尋模式 (加上 || '' 防止 desc 為空時報錯)
+        const descText = (photo.desc || '').toLowerCase();
+        const titleText = (photo.title || '').toLowerCase();
+        
+        return descText.includes(keyword) || titleText.includes(keyword);
       });
+      
       renderGallery(filtered);
     });
 
@@ -959,28 +953,21 @@ function deleteItem(id, event, isFromModal = false) {
     }
 
     const modal = document.getElementById('detailModal');
+    
     function openModal(photo) {
       document.getElementById('modalImg').src = photo.url;
       document.getElementById('modalTitle').innerText = photo.title;
       document.getElementById('modalDesc').innerText = photo.desc || '無提示詞';
-
-      // 設定刪除按鈕的 onclick 事件，讓它呼叫 deleteItem 並關閉 modal
-      // 注意：這裡傳入 true 代表是從 Modal 觸發的，刪除後要關閉 Modal
+      
       document.getElementById('modalDeleteBtn').onclick = (e) => deleteItem(photo.id, e, true);
 
-      // --- Tag 處理 (比照 Gallery 的 # split 邏輯) ---
-      let tagsHtml = '';
-      if (photo.tags) {
-        const tagString = String(photo.tags);
-        // 使用 # 切割，並過濾空白
-        const tagList = tagString.split('#').map(t => t.trim()).filter(t => t);
-
-        tagsHtml = tagList.map(t =>
+      // 使用共用函式處理 Tags
+      const tagList = parseTags(photo.tags);
+      const tagsHtml = tagList.map(t =>
            `<span class="tag" onclick="filterByTag('${t}', event); closeModal();">${t}</span>`
-        ).join('');
-      }
+      ).join('');
+      
       document.getElementById('modalTags').innerHTML = tagsHtml;
-
       modal.style.display = 'flex';
     }
 
@@ -988,30 +975,82 @@ function deleteItem(id, event, isFromModal = false) {
       modal.style.display = 'none';
     }
 
-    window.onclick = function(event) {
-      if (event.target == modal) closeModal();
+    // 統一處理點擊外部關閉視窗的邏輯
+    window.addEventListener('click', function(event) {
+       // 關閉詳情 Modal
+       if (event.target == modal) {
+         closeModal();
+       }
+       // 關閉教學 Modal
+       if (event.target == document.getElementById('tutorialModal')) {
+         closeTutorial();
+       }
+       // 關閉上傳 Modal (如果沒有用 onclick inline 的話，這裡也可以加)
+    });
+
+    function copyDesc() {
+      const text = document.getElementById('modalDesc').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        const originalContent = btn.innerHTML;
+        btn.innerHTML = '✅ 提示詞已複製';
+        setTimeout(() => {
+          btn.innerHTML = originalContent;
+        }, 3000);
+      });
     }
 
-function copyDesc() {
-  const text = document.getElementById('modalDesc').innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.querySelector('.btn-copy');
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '✅ 提示詞已複製';
-    setTimeout(() => {
-      btn.innerHTML = originalContent;
-    }, 3000);
-  });
-}
+    // 新增：下載圖片的功能
+    async function downloadImage() {
+      const img = document.getElementById('modalImg');
+      const title = document.getElementById('modalTitle').innerText || 'image';
+      const url = img.src;
+
+      try {
+        // 使用 fetch 抓取圖片內容
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network response was not ok");
+        
+        // 轉成 Blob
+        const blob = await response.blob();
+        
+        // 建立臨時連結
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = title + '.png'; // 這裡的 download 屬性會生效
+        document.body.appendChild(a);
+        
+        // 觸發點擊
+        a.click();
+        
+        // 清理資源
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(blobUrl);
+        
+      } catch (err) {
+        console.error("Auto download failed, falling back to new tab", err);
+        // 如果 fetch 被 CORS 擋下，退回開啟新分頁
+        window.open(url, '_blank');
+      }
+    }
 
     function toggleUpload() {
       const el = document.getElementById('uploadOverlay');
-      el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+      const isHidden = (el.style.display === 'none' || el.style.display === '');
+      el.style.display = isHidden ? 'flex' : 'none';
+
+      if (isHidden) {
+        document.querySelector('textarea[name="desc"]').value = '';
+        setTimeout(() => {
+           document.querySelector('input[name="title"]').focus();
+        }, 100);
+      }
     }
 
     function handleUpload(e) {
       e.preventDefault();
-      document.getElementById('loader').innerText = "正在進行逆向工程建檔中...";
+      document.getElementById('loader').innerText = "正在進行建檔中...";
       document.getElementById('loader').style.display = 'flex';
 
       const form = document.getElementById('uploadForm');
@@ -1019,12 +1058,13 @@ function copyDesc() {
         .withSuccessHandler(function(res) {
            document.getElementById('loader').style.display = 'none';
            if(res.success) {
-             toggleUpload();
+             toggleUpload(); // 關閉視窗
              form.reset();
-             showAlert('資料建檔成功！'); // 改用 showAlert
+             document.querySelector('textarea[name="desc"]').value = ''; 
+             showAlert('資料建檔成功！'); 
              loadData();
            } else {
-             showAlert('失敗: ' + res.error, "錯誤"); // 改用 showAlert
+             showAlert('失敗: ' + res.error, "錯誤"); 
            }
         })
         .uploadPhoto(form);
@@ -1041,21 +1081,7 @@ function copyDesc() {
       localStorage.setItem('theme', target);
     }
 
-    function toggleUpload() {
-      const el = document.getElementById('uploadOverlay');
-      const isHidden = (el.style.display === 'none' || el.style.display === '');
-      el.style.display = isHidden ? 'flex' : 'none';
-
-      // 如果是開啟視窗，自動聚焦在標題欄位
-      if (isHidden) {
-        setTimeout(() => {
-           document.querySelector('input[name="title"]').focus();
-        }, 100);
-      }
-    }
-
-
-const sysModal = document.getElementById('systemModal');
+    const sysModal = document.getElementById('systemModal');
     const sysTitle = document.getElementById('sysTitle');
     const sysMsg = document.getElementById('sysMsg');
     const sysBtnOk = document.getElementById('sysBtnOk');
@@ -1065,22 +1091,19 @@ const sysModal = document.getElementById('systemModal');
       sysModal.style.display = 'none';
     }
 
-    // 取代 alert()
     function showAlert(msg, title = "提示") {
       sysTitle.innerText = title;
       sysMsg.innerText = msg;
-      sysBtnCancel.style.display = 'none'; // 隱藏取消鈕
-      sysBtnOk.onclick = closeSystemModal; // 按確定只關閉視窗
+      sysBtnCancel.style.display = 'none'; 
+      sysBtnOk.onclick = closeSystemModal; 
       sysModal.style.display = 'flex';
     }
 
-    // 取代 confirm() - 這裡最重要，接收一個 callback 函式
     function showConfirm(msg, onConfirm) {
       sysTitle.innerText = "確認操作";
       sysMsg.innerText = msg;
-      sysBtnCancel.style.display = 'block'; // 顯示取消鈕
+      sysBtnCancel.style.display = 'block'; 
 
-      // 當按下確定時，執行傳進來的函式，然後關閉視窗
       sysBtnOk.onclick = function() {
         onConfirm();
         closeSystemModal();
@@ -1089,47 +1112,36 @@ const sysModal = document.getElementById('systemModal');
       sysModal.style.display = 'flex';
     }
 
-function clearFilter() {
-  const input = document.getElementById('searchInput');
-  input.value = '';
-  renderGallery(allPhotos); 
-}
-
-// 開啟教學 Modal
-  function openTutorial() {
-    document.getElementById('tutorialModal').style.display = 'flex';
-  }
-
-  function closeTutorial() {
-    document.getElementById('tutorialModal').style.display = 'none';
-  }
-
-  // 點擊 Modal 外部關閉
-  window.addEventListener('click', function(e){
-    if(e.target == document.getElementById('tutorialModal')){
-      closeTutorial();
+    function clearFilter() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      renderGallery(allPhotos); 
     }
-  });
 
-  // 點擊關鍵字複製功能
-  function copyKw(el) {
-    const text = el.innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      // 簡單的視覺回饋
-      const originalBg = el.style.background;
-      const originalText = el.innerText;
-      
-      el.innerText = '已複製!';
-      el.style.backgroundColor = 'var(--primary)';
-      el.style.color = '#fff';
+    function openTutorial() {
+      document.getElementById('tutorialModal').style.display = 'flex';
+    }
 
-      setTimeout(() => {
-        el.innerText = text;
-        el.style.backgroundColor = '';
-        el.style.color = '';
-      }, 800);
-    });
-  }
+    function closeTutorial() {
+      document.getElementById('tutorialModal').style.display = 'none';
+    }
+
+    function copyKw(el) {
+      const text = el.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalBg = el.style.background;
+        
+        el.innerText = '已複製!';
+        el.style.backgroundColor = 'var(--primary)';
+        el.style.color = '#fff';
+
+        setTimeout(() => {
+          el.innerText = text;
+          el.style.backgroundColor = '';
+          el.style.color = '';
+        }, 800);
+      });
+    }
   </script>
 </body>
 </html>
