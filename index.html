@@ -138,7 +138,7 @@
 }
 
   /* 主要按鈕樣式 (新增 .btn-download) */
-  .btn-upload, .btn-copy, .btn-download, #sysBtnOk {
+  .btn-upload, .btn-copy, .btn-update, .btn-download, #sysBtnOk {
     background: var(--text-light);
     color: #fff; /* 按鈕文字維持白色 */
     padding: 10px 25px;
@@ -630,6 +630,12 @@
            <div class="prompt-label">提示詞 (Prompt)</div>
            
            <div style="display:flex; gap: 10px;">
+             <button class="btn-update" id="modalUpdateBtn" title="更新內容">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush" viewBox="0 0 16 16">
+  <path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04M4.705 11.912a1.2 1.2 0 0 0-.419-.1c-.246-.013-.573.05-.879.479-.197.275-.355.532-.5.777l-.105.177c-.106.181-.213.362-.32.528a3.4 3.4 0 0 1-.76.861c.69.112 1.736.111 2.657-.12.559-.139.843-.569.993-1.06a3 3 0 0 0 .126-.75zm1.44.026c.12-.04.277-.1.458-.183a5.1 5.1 0 0 0 1.535-1.1c1.9-1.996 4.412-5.57 6.052-8.631-2.59 1.927-5.566 4.66-7.302 6.792-.442.543-.795 1.243-1.042 1.826-.121.288-.214.54-.275.72v.001l.575.575zm-4.973 3.04.007-.005zm3.582-3.043.002.001h-.002z"/>
+</svg>
+             </button>
+
              <button class="btn-download" onclick="downloadImage()" title="下載預覽圖">
                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
@@ -637,7 +643,7 @@
                </svg>
              </button>
              
-             <button class="btn-copy" onclick="copyDesc()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
+             <button class="btn-copy" onclick="copyDesc()" title="複製提示詞"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
     <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0  00-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
   </svg></button>
            </div>
@@ -668,7 +674,7 @@
         </div>
         <div class="form-group">
           <label>完整提示詞 (Prompt)</label>
-          <textarea name="desc" rows="5" placeholder="輸入完整的 AI 生成指令..."></textarea>
+          <textarea name="desc" rows="8" placeholder="輸入完整的 AI 生成指令..."></textarea>
         </div>
         <button type="submit" class="btn-upload" style="width:100%">確認建檔</button>
       </div>
@@ -812,8 +818,31 @@
 </div>
 
 <div class="footer">
-  <span class="version-tag">System Ver 1.1.0</span>
+  <span class="version-tag">System Ver 1.2.0</span>
   <span class="copyright">PromptNano AI 提示詞圖庫</span>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <form id="editForm">
+      <input type="hidden" id="edit-id">
+      <div id="uploadSection" style="display:block;">
+        <h3 style="text-align:center; color:var(--primary);">編輯 AI 靈感</h3>
+        <div class="form-group">
+          <label>標題</label>
+          <input type="text" id="edit-title" required placeholder="例如: 賽博龐克少女">
+        </div>
+        <div class="form-group">
+          <label>雲標籤 (Tag)</label>
+          <input type="text"  id="edit-tags" placeholder="例如: 8k, masterpiece, light effect">
+        </div>
+        <div class="form-group">
+          <label>完整提示詞 (Prompt)</label>
+          <textarea id="edit-desc" rows="8" placeholder="輸入完整的 AI 生成指令..."></textarea>
+        </div>
+        <button type="button" class="btn-upload" onclick="closeEditModal()" style="width:49%">取消</button>
+        <button type="button" class="btn-upload" onclick="saveEdit()" style="width:49%">儲存修改</button>
+      </div>
+    </form>
 </div>
 
 <script>
@@ -960,6 +989,7 @@
       document.getElementById('modalDesc').innerText = photo.desc || '無提示詞';
       
       document.getElementById('modalDeleteBtn').onclick = (e) => deleteItem(photo.id, e, true);
+      document.getElementById('modalUpdateBtn').onclick = (e) => openEditModal(photo.id, photo.title, photo.desc, photo.tags);
 
       // 使用共用函式處理 Tags
       const tagList = parseTags(photo.tags);
@@ -1142,6 +1172,50 @@
         }, 800);
       });
     }
+
+// 打開彈出視窗並填入舊資料
+function openEditModal(id, title, desc, tags) {
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-title').value = title;
+  document.getElementById('edit-desc').value = desc;
+  document.getElementById('edit-tags').value = tags;
+  
+  document.getElementById('editModal').style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+}
+
+// 呼叫後端 GAS 進行儲存
+function saveEdit() {
+  const id = document.getElementById('edit-id').value;
+  const updatedData = {
+    title: document.getElementById('edit-title').value,
+    desc: document.getElementById('edit-desc').value,
+    tags: document.getElementById('edit-tags').value
+  };
+
+  // 顯示處理中的狀態（選配）
+  const saveBtn = event.target;
+  saveBtn.disabled = true;
+  saveBtn.innerText = '儲存中...';
+
+  google.script.run
+    .withSuccessHandler(function(response) {
+      if (response.success) {
+        //showAlert('修改成功！');
+        closeEditModal();
+        closeModal();
+        loadData();
+      } else {
+        showAlert('錯誤：' + response.error);
+      }
+      saveBtn.disabled = false;
+      saveBtn.innerText = '儲存修改';
+    })
+    .updatePhoto(id, updatedData);
+}    
   </script>
 </body>
 </html>

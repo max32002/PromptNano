@@ -205,3 +205,42 @@ function deletePhoto(id) {
     return { success: false, error: '找不到該筆資料，可能已被刪除。' };
   }
 }
+
+// 修改照片資料
+function updatePhoto(id, updatedData) {
+  try {
+    const sheet = getOrCreatePhotosSheet_();
+    const data = sheet.getDataRange().getValues();
+    let rowIndex = -1;
+
+    // 遍歷尋找對應 ID 的資料 (跳過標題列)
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][0] == id) {
+        rowIndex = i + 1; // 轉為試算表列號
+        break;
+      }
+    }
+
+    if (rowIndex > 0) {
+      // 定義轉換函數，處理簡轉繁 (跟上傳功能一致)
+      const toTC = (text) => text ? LanguageApp.translate(text, 'zh-CN', 'zh-TW') : "";
+
+      const titleTC = toTC(updatedData.title);
+      const descTC = toTC(updatedData.desc);
+      const tagsTC = toTC(updatedData.tags);
+
+      // 更新第 3, 4, 5 欄 (標題, 描述, 標籤)
+      sheet.getRange(rowIndex, 3, 1, 3).setValues([[
+        titleTC,
+        descTC,
+        tagsTC
+      ]]);
+
+      return { success: true };
+    } else {
+      return { success: false, error: '找不到該筆資料' };
+    }
+  } catch (e) {
+    return { success: false, error: e.toString() };
+  }
+}
