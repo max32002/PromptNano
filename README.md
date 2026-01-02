@@ -10,6 +10,10 @@
 
 不同於冷冰冰的文字表格，PromptNano 讓你透過「看圖」的方式直覺管理靈感。搭配溫暖可愛的 UI 設計，支援深色/淺色主題切換，讓整理提示詞變成一件療癒的事。
 
+本專案使用 **Google Apps Script** 架構，支援線上使用流暢的操作體驗。如果想在本地端或雲端虛擬主機上使用，可以使用 [Node.js + SQLite 架構的 PromptNano-Node](https://github.com/max32002/PromptNano-Node)。
+
+![PromptNano Banner](https://github.com/max32002/PromptNano-Node/raw/main/preview/banner.jpg) 
+
 ## ✨ 主要功能
 
 * **👀 視覺化瀑布流**
